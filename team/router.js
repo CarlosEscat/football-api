@@ -17,7 +17,7 @@ router.post("/team", (req, res, next) => {
     .catch(next);
 });
 
-//Get a team information
+//Get a teams information
 router.get("/team/:teamId", (req, res, next) => {
   Team.findByPk(req.params.teamId)
     .then(team => {
@@ -26,6 +26,33 @@ router.get("/team/:teamId", (req, res, next) => {
       } else {
         res.json(team);
       }
+    })
+    .catch(next);
+});
+
+//Update a teams information
+router.put("/team/:teamId", (req, res, next) => {
+  Team.findByPk(req.params.teamId)
+    .then(team => {
+      if (team) {
+        return team.update(req.body).then(team => res.json(team));
+      }
+      return res.status(404).end();
+    })
+    .catch(next);
+});
+
+router.delete("/team/:teamId", (req, res, next) => {
+  Team.destroy({
+    where: {
+      id: req.params.teamId
+    }
+  })
+    .then(numDeleted => {
+      if (numDeleted) {
+        res.send({ numDeleted });
+      }
+      return res.status(404).end();
     })
     .catch(next);
 });
