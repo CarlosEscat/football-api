@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const Team = require("./model");
+const City = require("../city/model");
 
 const router = new Router();
 router.get("/team", (req, res, next) =>
@@ -19,7 +20,7 @@ router.post("/team", (req, res, next) => {
 
 //Get a teams information
 router.get("/team/:teamId", (req, res, next) => {
-  Team.findByPk(req.params.teamId)
+  Team.findByPk(req.params.teamId, { include: [City] })
     .then(team => {
       if (!team) {
         res.status(404).end();

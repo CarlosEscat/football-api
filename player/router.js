@@ -1,11 +1,13 @@
 const { Router } = require("express");
 const Player = require("./model");
 const Team = require("../team/model");
+const City = require("../city/model");
+
 const router = new Router();
 router.get("/player", (req, res, next) =>
   Player.findAll()
-    .then(teams => {
-      return res.json({ teams: teams });
+    .then(players => {
+      return res.json({ players: players });
     })
     .catch(error => next(error))
 );
@@ -19,7 +21,7 @@ router.post("/player", (req, res, next) => {
 
 //Get a players information
 router.get("/player/:playerId", (req, res, next) => {
-  Player.findByPk(req.params.playerId, { include: [Team] })
+  Player.findByPk(req.params.playerId, { include: [Team, City] })
     .then(player => {
       if (!player) {
         res.status(404).end();
@@ -56,5 +58,11 @@ router.delete("/player/:playerId", (req, res, next) => {
     })
     .catch(next);
 });
+
+// Post.findAll({
+//   where: {
+//     authorId: 2
+//   }
+// });
 
 module.exports = router;
